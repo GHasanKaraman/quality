@@ -11,8 +11,6 @@
   "description": "",
   "dependencies": {
     "body-parser": "^2.2.0",
-    "chalk": "^4.1.2",
-    "console-stamp": "^3.1.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

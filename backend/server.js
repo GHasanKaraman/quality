@@ -6,7 +6,7 @@ const path = require("path");
 require("dotenv").config();
 
 const authentication = require("./routes/authentication.js");
-const { logger } = require("./utility/logger");
+const { logger } = require("./middleware/logger.js");
 const { connectDB } = require("./utility/db.js");
 const { verifyJWT } = require("./utility/JWT.js");
 
@@ -45,7 +45,7 @@ db.once("open", function () {
   );
 
   //Logging requests
-  app.use(logger());
+  app.use(logger);
 
   app.use(express.json());
 
