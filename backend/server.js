@@ -7,8 +7,11 @@ require("dotenv").config();
 
 const authentication = require("./routes/authentication.js");
 const { logger } = require("./middleware/logger.js");
+const errorHandler = require("./middleware/errorHandler.js");
 const { connectDB } = require("./utility/db.js");
 const { verifyJWT } = require("./utility/JWT.js");
+const cookieParser = require("cookie-parser");
+const corsOptions = require("./config/corsOptions.js");
 
 const app = express();
 
@@ -20,20 +23,6 @@ const db = connectDB();
 db.on("error", console.error.bind(console, "connection error:"));
 
 db.once("open", function () {
-  app.use("/", express.static(path.join(__dirname, "public")));
-
-  //Accepts requests from only react client
-  app.use(
-    cors({
-      origin: ["http://localhost:3000", "http://10.12.11.193:3000"],
-      methods: ["GET", "POST"],
-      credentials: true,
-    })
-  );
-
-  //parse requests to JSON
-  app.use(bodyParser.urlencoded({ extended: true }));
-
   //express session creation, expires in 24 hours
   app.use(
     session({
@@ -41,13 +30,18 @@ db.once("open", function () {
       resave: false,
       saveUninitialized: false,
       cookie: { maxAge: 1000 * 60 * 60 * 24 },
-    })
+    }),
   );
 
   //Logging requests
   app.use(logger);
 
+  app.use(cors(corsOptions));
+
   app.use(express.json());
+  app.use(cookieParser());
+
+  app.use("/", express.static(path.join(__dirname, "public")));
 
   app.use("/", require("./routes/root.js"));
 
@@ -64,7 +58,9 @@ db.once("open", function () {
 
   app.use("/", authentication);
 
-  app.use(verifyJWT);
+  app.use(errorHandler);
+
+  //app.use(verifyJWT);
 
   app.get("/userInfo", async (req, res) => {
     res.send(req.session.user);
@@ -73,7 +69,7 @@ db.once("open", function () {
   app.listen(PORT, () => {
     console.log(
       "\x1b[33m%s\x1b[0m",
-      "mongo connection established successfully!"
+      "mongo connection established successfully!",
     );
     console.log("\x1b[32m%s\x1b[0m", "Listening on port " + process.env.PORT);
   });

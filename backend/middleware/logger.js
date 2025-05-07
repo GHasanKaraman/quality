@@ -11,7 +11,7 @@ const logEvents = async (logItem, logFileName) => {
     }
     await fsPromises.appendFile(
       path.join(__dirname, "..", "logs", logFileName),
-      logItem
+      logItem,
     );
   } catch (err) {
     console.log(err);
@@ -40,7 +40,7 @@ const logger = morgan(
         console.log(message);
       },
     },
-  }
+  },
 );
 
-module.exports = { logger };
+module.exports = { logEvents, logger };
