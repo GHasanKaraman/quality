@@ -1,0 +1,19 @@
+h1{
+    color:green;
+}
+
+.logo{
+    width:50%;
+}
+
+.container{
+    width:100%;
+    text-align: center;
+    height:90vh;
+    align-content: center;
+}
+
+img{
+    width:80%;
+    margin-top: 50px;
+}
