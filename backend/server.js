@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const authentication = require("./routes/authentication.js");
 const { logger } = require("./utility/logger");
 const { connectDB } = require("./utility/db.js");
+const { verifyJWT } = require("./utility/JWT.js");
 
 require("dotenv").config();
 
@@ -36,10 +37,10 @@ db.once("open", function () {
   //express session creation, expires in 24 hours
   app.use(
     session({
-      secret: "ciboqa",
+      secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
-      cookie: { maxAge: 6000 * 60 * 24 },
+      cookie: { maxAge: 1000 * 60 * 60 * 24 },
     }),
   );
 
@@ -59,6 +60,12 @@ db.once("open", function () {
   });
 
   app.use("/", authentication);
+
+  app.use(verifyJWT);
+
+  app.get("/userInfo", async (req, res) => {
+    res.send(req.session.user);
+  });
 
   app.listen(PORT, () => {
     console.log(
