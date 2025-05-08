@@ -1,7 +1,7 @@
 const express = require("express");
 const fetch = require("../utility/fetch");
 const { createToken } = require("../utility/JWT");
-const tokenModel = require("../models/tokenModel");
+const tokenModel = require("../models/Token");
 
 const router = express.Router();
 
