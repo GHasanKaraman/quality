@@ -7,11 +7,7 @@ import { tokens } from "../theme";
 
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
-import logo from "../images/logo.png";
-
-import { userInformations } from "../atoms/userAtom";
-
-import axios from "../api/axios";
+import logo from "../img/logo.png";
 
 const Item = ({
   title,
@@ -61,11 +57,6 @@ const Sidebar = () => {
       return false;
     })(),
   );
-
-  const loadUser = async () => {
-    const response = await axios.post("/user/get", null);
-    return response;
-  };
 
   useEffect(() => {
     //user loading

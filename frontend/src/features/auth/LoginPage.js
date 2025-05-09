@@ -6,11 +6,10 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useSnackbar } from "notistack";
 
-import logo from "../../../images/logo.png";
-import factory from "../../../images/factory.gif";
+import logo from "../../img/logo.png";
+import factory from "../../img/factory.gif";
 
 import "./loginPage.css";
-import axios from "../../../api/axios";
 
 const LoginPage = (props) => {
   const theme = useTheme();
@@ -32,9 +31,9 @@ const LoginPage = (props) => {
   const login = async (values) => {
     const { username, password } = values;
 
-    const result = await axios.post("/login", { username, password });
-    console.log(result);
-
+    /*const result = await axios.post("/login", { username, password });
+    constnsole.log(result);
+*/
     //navigate("/dashboard");
   };
 

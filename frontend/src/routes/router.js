@@ -1,10 +1,11 @@
-import { Routes, Route, Outlet, Navigate, BrowserRouter } from "react-router";
+import { Routes, Route, Outlet, Navigate } from "react-router";
 
-import Topbar from "../scenes/Topbar.jsx";
-import Sidebar from "../scenes/Sidebar.jsx";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "../theme";
-import LoginPage from "../components/pages/loginPage/LoginPage.js";
+import Sidebar from "../components/Sidebar.jsx";
+import Topbar from "../components/Topbar.jsx";
+
+import LoginPage from "../features/auth/LoginPage.js";
 
 const BarLayout = () => {
   const [theme, colorMode] = useMode();
