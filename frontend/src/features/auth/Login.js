@@ -9,7 +9,7 @@ import { useSnackbar } from "notistack";
 import logo from "../../img/logo.png";
 import factory from "../../img/factory.gif";
 
-import "./loginPage.css";
+import "./login.css";
 
 const LoginPage = (props) => {
   const theme = useTheme();
