@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Sidebar as ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, Avatar, useTheme } from "@mui/material";
 import { useNavigate } from "react-router";
+import packageInfo from "../../package.json";
 
 import { tokens } from "../theme";
 
@@ -55,7 +56,7 @@ const Sidebar = () => {
         return true;
       }
       return false;
-    })(),
+    })()
   );
 
   useEffect(() => {
@@ -99,7 +100,7 @@ const Sidebar = () => {
             />
             {!isCollapsed ? (
               <Typography variant="h6" color={colors.grey[100]}>
-                v1.0.5
+                v{packageInfo.version}
               </Typography>
             ) : null}
           </div>

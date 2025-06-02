@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline, Stack, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "../theme";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
@@ -11,13 +11,13 @@ const AppLayout = () => {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="app">
+        <Stack width="100%" className="app" direction="row">
           <Sidebar />
           <main className="content">
             <Topbar />
             <Outlet />
           </main>
-        </div>
+        </Stack>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
