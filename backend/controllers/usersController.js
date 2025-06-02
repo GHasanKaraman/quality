@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 // @desc Get all users
 // @route GET /users
 // @access Private
-
 const getAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find().select("-password").lean();
 
@@ -19,11 +18,16 @@ const getAllUsers = asyncHandler(async (req, res) => {
 // @desc Create new users
 // @route POST /users
 // @access Private
-
 const createNewUser = asyncHandler(async (req, res) => {
-  const { username, password, roles } = req.body;
+  const { username, name, email, picture, password, roles } = req.body;
   // Confirm data
-  if (!username || !password || !Array.isArray(roles) || !roles.length) {
+  if (
+    !username ||
+    !name ||
+    !password ||
+    !Array.isArray(roles) ||
+    !roles.length
+  ) {
     return res.status(400).json({ message: "All fields are required" });
   }
   // Check for duplicate
@@ -33,7 +37,14 @@ const createNewUser = asyncHandler(async (req, res) => {
   }
   // Hash password
   const hashedPwd = await bcrypt.hash(password, 10); // salt rounds
-  const userObject = { username, password: hashedPwd, roles };
+  const userObject = {
+    username,
+    name,
+    email,
+    picture,
+    password: hashedPwd,
+    roles,
+  };
   // Create and store new user
   const user = await User.create(userObject);
   if (user) {
@@ -47,14 +58,14 @@ const createNewUser = asyncHandler(async (req, res) => {
 // @desc Update a user
 // @route PATCH /users
 // @access Private
-
 const updateUser = asyncHandler(async (req, res) => {
-  const { id, username, roles, active, password } = req.body;
+  const { id, username, name, roles, active, password } = req.body;
 
   // Confirm data
   if (
     !id ||
     !username ||
+    !name ||
     !Array.isArray(roles) ||
     !roles.length ||
     typeof active !== "boolean"
@@ -91,7 +102,6 @@ const updateUser = asyncHandler(async (req, res) => {
 // @desc Delete a user
 // @route DELETE /users
 // @access Private
-
 const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.body;
   // Confirm data

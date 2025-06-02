@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const session = require("express-session");
 const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -12,8 +11,6 @@ const errorHandler = require("./middleware/errorHandler.js");
 const corsOptions = require("./config/corsOptions.js");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn.js");
-
-const authentication = require("./routes/authentication.js");
 const { verifyJWT } = require("./utility/JWT.js");
 
 const PORT = process.env.PORT || 4000;
@@ -22,16 +19,6 @@ console.log(process.env.NODE_ENV);
 
 //mongoose connection
 connectDB();
-
-//express session creation, expires in 24 hours
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 },
-  })
-);
 
 //Logging requests
 app.use(logger);
@@ -44,6 +31,7 @@ app.use(cookieParser());
 app.use("/", express.static(path.join(__dirname, "public")));
 
 app.use("/", require("./routes/root"));
+app.use("/", require("./routes/authentication"));
 app.use("/users", require("./routes/userRoutes"));
 
 app.all(/.*/, (req, res) => {
@@ -56,8 +44,6 @@ app.all(/.*/, (req, res) => {
     res.type("txt").send("404 Not Found");
   }
 });
-
-app.use("/", authentication);
 
 app.use(errorHandler);
 
