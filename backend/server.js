@@ -11,7 +11,6 @@ const errorHandler = require("./middleware/errorHandler.js");
 const corsOptions = require("./config/corsOptions.js");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn.js");
-const { verifyJWT } = require("./utility/JWT.js");
 
 const PORT = process.env.PORT || 4000;
 
@@ -31,7 +30,7 @@ app.use(cookieParser());
 app.use("/", express.static(path.join(__dirname, "public")));
 
 app.use("/", require("./routes/root"));
-app.use("/", require("./routes/authentication"));
+app.use("/auth", require("./routes/authentication"));
 app.use("/users", require("./routes/userRoutes"));
 
 app.all(/.*/, (req, res) => {
@@ -46,8 +45,6 @@ app.all(/.*/, (req, res) => {
 });
 
 app.use(errorHandler);
-
-//app.use(verifyJWT);
 
 app.get("/userInfo", async (req, res) => {
   res.send(req.session.user);
