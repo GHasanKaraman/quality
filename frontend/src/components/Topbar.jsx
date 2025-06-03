@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   Box,
@@ -21,12 +21,17 @@ import Logout from "@mui/icons-material/Logout";
 
 import { ColorModeContext, tokens } from "../theme";
 
+import { useSendLogOutMutation } from "../features/auth/authApiSlice";
+
 const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
   const navigate = useNavigate();
+
+  const [sendLogout, { isLoading, isSuccess, isError, error }] =
+    useSendLogOutMutation();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const openUser = Boolean(anchorElUser);
@@ -41,10 +46,15 @@ const Topbar = () => {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    navigate("/login");
+    sendLogout();
+    navigate("/");
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/");
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <Box

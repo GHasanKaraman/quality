@@ -1,10 +1,12 @@
-import React from "react";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
-import { useTheme } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useSnackbar } from "notistack";
+
+import { useDispatch } from "react-redux";
+import { setCredentials } from "./authSlice";
+import { useLoginMutation } from "./authApiSlice";
 
 import logo from "../../img/logo.png";
 import factory from "../../img/factory.gif";
@@ -12,33 +14,41 @@ import factory from "../../img/factory.gif";
 import "./login.css";
 
 const LoginPage = (props) => {
-  const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
+
+  const [login, { isLoading }] = useLoginMutation();
 
   useEffect(() => {
     document.title = props.title || "";
   }, [props.title]);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/dashboard");
-    }
-  }, []);
-
-  const login = async (values) => {
+  const handleSubmit = async (values, { resetForm }) => {
     const { username, password } = values;
 
-    /*const result = await axios.post("/login", { username, password });
-    constnsole.log(result);
-*/
-    //navigate("/dashboard");
-  };
-
-  const handleSubmit = async (values, { resetForm }) => {
-    login(values);
+    try {
+      const { accessToken } = await login({ username, password }).unwrap();
+      dispatch(setCredentials({ accessToken }));
+      resetForm();
+      navigate("/dashboard");
+    } catch (error) {
+      if (!error.status) {
+        enqueueSnackbar("Network error, please try again later", {
+          variant: "error",
+        });
+      } else if (error.status === 400) {
+        enqueueSnackbar("Invalid username or password", { variant: "error" });
+      } else if (error.status === 401) {
+        enqueueSnackbar("Unauthorized", {
+          variant: "error",
+        });
+      } else {
+        enqueueSnackbar("An unexpected error occurred", { variant: "error" });
+        console.error(error.data?.message);
+      }
+    }
   };
 
   const formik = useFormik({
