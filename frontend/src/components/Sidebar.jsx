@@ -3,6 +3,7 @@ import { Sidebar as ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, Avatar, useTheme } from "@mui/material";
 import { useNavigate } from "react-router";
 import packageInfo from "../../package.json";
+import useAuth from "../hooks/useAuth";
 
 import { tokens } from "../theme";
 
@@ -47,6 +48,9 @@ const Item = ({
 };
 
 const Sidebar = () => {
+
+  const { username, status } = useAuth();
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(
@@ -148,14 +152,14 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  {"user.username"}
+                  {username}
                 </Typography>
                 <Typography
                   variant="h5"
                   fontWeight="600"
                   color={colors.ciboInnerGreen[500]}
                 >
-                  QC
+                  {status}
                 </Typography>
               </Box>
             </Box>
