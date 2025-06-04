@@ -44,6 +44,10 @@ const LoginPage = (props) => {
         enqueueSnackbar("Unauthorized", {
           variant: "error",
         });
+      } else if (error.status === 429) {
+        enqueueSnackbar(error.data?.message, {
+          variant: "error",
+        });
       } else {
         enqueueSnackbar("An unexpected error occurred", { variant: "error" });
         console.error(error.data?.message);

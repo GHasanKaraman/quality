@@ -6,7 +6,7 @@ const loginLimiter = rateLimit({
   max: 5, // Limit each IP to 5 requests per windowMs
   message: {
     status: "error",
-    message: "Too many login attempts from this IP, please try again later.",
+    message: "Too many login attempts from this IP. Please try again later.",
   },
   handler: (req, res, next, options) => {
     logEvents(

@@ -10,17 +10,24 @@ const UsersList = () => {
     isSuccess,
     isError,
     error,
-  } = useGetUsersQuery(undefined, {
-    pollingInterval: 60000, // Poll every 60 seconds
+  } = useGetUsersQuery("usersList", {
+    pollingInterval: 40000, // Poll every 60 seconds
     refetchOnFocus: true,
     refetchOnReconnect: true,
   });
 
   useEffect(() => {
-    if (isSuccess) {
-      console.log(users);
+    if (isLoading) {
+      console.log("Loading users...");
+    } else {
+      if (isSuccess) {
+        console.log(users);
+      }
+      if (isError) {
+        console.log(error?.data?.message);
+      }
     }
-  }, [isSuccess]);
+  }, [isSuccess, isError, isLoading]);
 
   return (
     <Box m="80px 20px">
