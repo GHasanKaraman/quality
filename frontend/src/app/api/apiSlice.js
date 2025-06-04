@@ -3,6 +3,7 @@ import { setCredentials } from "../../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:4000",
+  credentials: "include", // Include cookies in requests
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
     if (token) {
@@ -19,7 +20,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     // Handle token refresh logic here if needed
     console.log("Sending refresh token");
     const refreshResult = await baseQuery("/auth/refresh", api, extraOptions);
-    console.log(refreshResult);
+
     if (refreshResult?.data) {
       // Store the new token in the state
       api.dispatch(setCredentials({ ...refreshResult.data }));
